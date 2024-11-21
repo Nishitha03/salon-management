@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 // Get a single service
 router.get('/:service', async (req, res) => {
   try {
-    const [service] = await executeQuery('SELECT * FROM Service WHERE Service_Name = ?', [req.params.service]);
+    const [service] = await executeQuery('SELECT Service_ID FROM Service WHERE Service_Name = ?', [req.params.service]);
     if (service) {
       res.json(service);
     } else {

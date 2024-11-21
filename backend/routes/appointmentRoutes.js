@@ -4,23 +4,24 @@ const { executeQuery } = require('../dbUtils');
 
 // Create a new appointment
 router.post('/', async (req, res) => {
-  const { Appointment_ID, Appointment_Date, Customer_ID, Employee_ID, Service_ID, Product_Used, Price } = req.body;
+  const { Appointment_ID, Appointment_Date, Customer_Name, Employee_Name, Service_Name } = req.body;
   try {
     const result = await executeQuery(
-      'INSERT INTO Appointment (Appointment_ID, Appointment_Date, Customer_ID, Employee_ID, Service_ID, Product_Used, Price) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [Appointment_ID, Appointment_Date, Customer_ID, Employee_ID, Service_ID, Product_Used, Price]
+      'INSERT INTO Appointment (Appointment_ID, Appointment_Date, Customer_Name, Employee_Name, Service_Name) VALUES (?, ?, ?, ?, ?)',
+      [Appointment_ID, Appointment_Date, Customer_Name, Employee_Name, Service_Name]
     );
     res.status(201).json({ id: result.insertId, message: 'Appointment created successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error creating appointment', error });
+    res.status(400).json({ err : error });
   }
 });
+
 
 // Get all appointments
 router.get('/', async (req, res) => {
   try {
     const appointments = await executeQuery('SELECT * FROM Appointment');
-    res.json(appointments);
+    return res.json(appointments);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching appointments', error });
   }
@@ -40,7 +41,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update an appointment
+//Update an appointment
 router.put('/:id', async (req, res) => {
   const { Appointment_Date, Customer_ID, Employee_ID, Service_ID, Product_Used, Price } = req.body;
   try {
@@ -73,4 +74,5 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 
